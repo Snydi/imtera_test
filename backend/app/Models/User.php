@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,10 +14,15 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function organizations(): HasMany
+    {
+        return $this->hasMany(Organization::class);
+    }
+
     /**
      * @var list<string>
      */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
@@ -25,7 +31,7 @@ class User extends Authenticatable
     /**
      * @var list<string>
      */
-    protected array $hidden = [
+    protected $hidden = [
         'password',
         'remember_token',
     ];
