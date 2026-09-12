@@ -63,11 +63,20 @@ async function submit() {
 <style scoped>
 .login-page {
     max-width: 360px;
+    padding: 36px;
+}
+
+form {
+    display: grid;
+    margin-top: 28px;
 }
 
 input {
-    box-sizing: border-box;
     width: 100%;
     margin-bottom: 20px;
+}
+
+button {
+    margin-top: 4px;
 }
 </style>
