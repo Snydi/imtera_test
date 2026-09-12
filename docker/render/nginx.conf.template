@@ -1,0 +1,29 @@
+map $http_x_forwarded_proto $app_forwarded_proto {
+    default $http_x_forwarded_proto;
+    "" $scheme;
+}
+
+server {
+    listen 0.0.0.0:${PORT};
+    server_name _;
+    root /var/www/html/frontend/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~ ^/(api(?:/|$)|sanctum(?:/|$)|up$) {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/backend/public/index.php;
+        fastcgi_param SCRIPT_NAME /index.php;
+        fastcgi_param HTTP_HOST $http_host;
+        fastcgi_param HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $app_forwarded_proto;
+        fastcgi_pass 127.0.0.1:9000;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}
