@@ -15,7 +15,7 @@ if [ -z "${SANCTUM_STATEFUL_DOMAINS:-}" ] && [ -n "${RENDER_EXTERNAL_HOSTNAME:-}
     export SANCTUM_STATEFUL_DOMAINS="${RENDER_EXTERNAL_HOSTNAME}"
 fi
 
-mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+mkdir -p resources/views storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
 
 case "${1:-web}" in
     web)

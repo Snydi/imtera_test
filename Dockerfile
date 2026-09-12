@@ -37,7 +37,7 @@ RUN composer install \
 
 COPY backend/ ./
 RUN composer dump-autoload --no-dev --no-interaction --optimize \
-    && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && mkdir -p resources/views storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
 COPY --from=frontend /build/frontend/dist /var/www/html/frontend/dist
