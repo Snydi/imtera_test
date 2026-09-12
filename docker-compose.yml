@@ -1,7 +1,7 @@
-name: intera_test
+name: imtera_test
 
 x-app: &app
-  image: ${COMPOSE_PROJECT_NAME:-intera_test}-app
+  image: ${COMPOSE_PROJECT_NAME:-imtera_test}-app
   build:
     context: .
     dockerfile: docker/php/Dockerfile

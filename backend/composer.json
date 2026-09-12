@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "intera/maps",
+    "name": "imtera/maps",
     "type": "project",
     "description": "Yandex Maps integration",
     "keywords": [
