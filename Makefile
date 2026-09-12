@@ -16,23 +16,27 @@ help:
 env:
 	docker run --rm -v "$(CURDIR):/workspace" -w /workspace composer:2.10.2 php docker/init.php
 
-install: build
-	$(COMPOSE) run --rm --no-deps app composer install --no-interaction --prefer-dist
+install: env
+	docker image inspect imtera_test-app > /dev/null 2>&1 || $(COMPOSE) build app
+	$(COMPOSE) up -d postgres
+	$(COMPOSE) run --rm --no-deps app composer install --no-interaction --prefer-dist --no-progress
+	$(COMPOSE) run --rm --no-deps frontend
 	$(COMPOSE) up -d --wait postgres
-	$(COMPOSE) run --rm app php artisan migrate --force
-	$(COMPOSE) run --rm app php artisan db:seed --force
-	$(COMPOSE) run --rm --no-deps app chown -R www-data:www-data storage bootstrap/cache
+	$(COMPOSE) run --rm app sh -c "php artisan migrate --force && php artisan db:seed --force && chown -R www-data:www-data storage bootstrap/cache"
 	$(COMPOSE) up -d --wait
 	@echo Ready. Default URL: http://localhost:8080
 
-remove: env
+remove:
 	$(COMPOSE) down --volumes --remove-orphans --rmi local
+	-docker volume rm imtera_test_pgdata imtera_test_vendor imtera_test_node_modules imtera_test_composer_cache imtera_test_npm_cache
+	-docker network rm imtera_test_default
+	-docker image rm imtera_test-app
 	docker run --rm -v "$(CURDIR):/workspace" -w /workspace composer:2.10.2 php docker/remove.php
 	@echo Removed. The working tree is ready for a clean installation.
 
 build: env
 	$(COMPOSE) build app
-	$(COMPOSE) run --rm --no-deps frontend sh -c "npm ci && npm run build"
+	$(COMPOSE) run --rm --no-deps frontend
 
 up:
 	$(COMPOSE) up -d --wait
