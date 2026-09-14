@@ -62,6 +62,13 @@ class YandexMapsOrganizationParser
             }
 
             $html = $page === 1 ? $firstPage->body() : $this->fetch($this->pageUrl($reviewsUrl, $page))->body();
+
+            if ($page > 1 && ! str_contains($html, '"reviewResults":')) {
+                $sourceExhausted = true;
+
+                break;
+            }
+
             $pageReviews = $this->extractReviews($html);
 
             if ($pageReviews === []) {
