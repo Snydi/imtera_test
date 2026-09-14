@@ -227,6 +227,10 @@ class YandexMapsOrganizationParser
 
             $rating = (int) $sourceReview['rating'];
 
+            if ((float) $sourceReview['rating'] === 0.0) {
+                continue;
+            }
+
             if ($rating < 1 || $rating > 5) {
                 throw new YandexMapsParsingException('Яндекс вернул оценку отзыва вне допустимого диапазона.');
             }
